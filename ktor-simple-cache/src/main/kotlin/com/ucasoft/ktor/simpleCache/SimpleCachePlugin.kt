@@ -9,10 +9,9 @@ import io.ktor.util.*
 import kotlin.time.Duration
 
 class SimpleCachePluginConfig {
-
     lateinit var queryKeys: List<String>
-
     var invalidateAt: Duration? = null
+    var onlyMatchQueryKeys: Boolean = false
 }
 
 val SimpleCachePlugin = createRouteScopedPlugin(name = "SimpleCachePlugin", ::SimpleCachePluginConfig) {
@@ -32,9 +31,9 @@ val SimpleCachePlugin = createRouteScopedPlugin(name = "SimpleCachePlugin", ::Si
     onCallRespond { call, body ->
         if ((call.response.status() ?: HttpStatusCode.OK) >= HttpStatusCode.BadRequest) {
             provider.badResponse()
-        }
-        else if (!call.attributes.contains(isResponseFromCacheKey)) {
-            provider.saveCache(buildKey(call.request, pluginConfig.queryKeys), body, pluginConfig.invalidateAt)
+        } else if (!call.attributes.contains(isResponseFromCacheKey)) {
+            if (!pluginConfig.onlyMatchQueryKeys || verifyRequestParams(call.request, pluginConfig.queryKeys))
+                provider.saveCache(buildKey(call.request, pluginConfig.queryKeys), body, pluginConfig.invalidateAt)
         }
     }
 }
@@ -48,3 +47,6 @@ private fun buildKey(request: ApplicationRequest, queryKeys: List<String>): Stri
     }"
     return key.trimEnd('?')
 }
+
+private fun verifyRequestParams(request: ApplicationRequest, queryKeys: List<String>): Boolean =
+    queryKeys.any { it in request.queryParameters }

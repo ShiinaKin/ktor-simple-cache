@@ -9,11 +9,20 @@ class CacheOutputSelector : RouteSelector() {
     override fun evaluate(context: RoutingResolveContext, segmentIndex: Int) = RouteSelectorEvaluation.Transparent
 }
 
-fun Route.cacheOutput(invalidateAt: Duration? = null, queryKeys: List<String> = emptyList(), build: Route.() -> Unit) : Route {
+/**
+ * @param onlyMatchQueryKeys if true, only cache the response when any query params of request are contained in queryKeys, and only use the matching query params to construct the cacheKey.
+ */
+fun Route.cacheOutput(
+    invalidateAt: Duration? = null,
+    queryKeys: List<String> = emptyList(),
+    onlyMatchQueryKeys: Boolean = false,
+    build: Route.() -> Unit
+): Route {
     val route = createChild(CacheOutputSelector())
     route.install(SimpleCachePlugin) {
         this.invalidateAt = invalidateAt
         this.queryKeys = queryKeys
+        this.onlyMatchQueryKeys = onlyMatchQueryKeys
     }
     route.build()
     return route

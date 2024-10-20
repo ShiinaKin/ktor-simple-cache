@@ -18,7 +18,7 @@ publishing {
             pom {
                 name.set(libraryData.name)
                 description.set(libraryData.description)
-                url.set("https://github.com/Scogun/ktor-simple-cache")
+                url.set("https://github.com/ShiinaKin/ktor-simple-cache")
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
@@ -27,33 +27,29 @@ publishing {
                 }
                 developers {
                     developer {
-                        id.set("Scogun")
-                        name.set("Sergey Antonov")
-                        email.set("SAntonov@ucasoft.com")
+                        id.set("ShiinaKin")
+                        name.set("Shiina Kin")
+                        email.set("shiina@sakurasou.io")
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/Scogun/ktor-simple-cache.git")
-                    developerConnection.set("scm:git:ssh://github.com:Scogun/ktor-simple-cache.git")
-                    url.set("https://github.com/Scogun/ktor-simple-cache")
+                    connection.set("scm:git:git://github.com/ShiinaKin/ktor-simple-cache.git")
+                    developerConnection.set("scm:git:ssh://github.com:ShiinaKin/ktor-simple-cache.git")
+                    url.set("https://github.com/ShiinaKin/ktor-simple-cache")
                 }
             }
         }
     }
     repositories {
         maven {
-            name = "MavenCentral"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ShiinaKin/ktor-simple-cache")
             credentials {
-                username = System.getenv("MAVEN_TOKEN_USERNAME")
-                password = System.getenv("MAVEN_TOKEN_PASSWORD")
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("PAT")
             }
         }
     }
-}
-
-signing {
-    sign(publishing.publications)
 }
 
 tasks.withType<AbstractPublishToMaven>().configureEach {

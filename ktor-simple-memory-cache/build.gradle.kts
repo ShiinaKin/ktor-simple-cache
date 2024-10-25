@@ -5,10 +5,12 @@ plugins {
     id("publish")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 kotlin {
-    jvm {
-        jvmToolchain(11)
-    }
     linuxX64()
     macosX64()
     sourceSets {

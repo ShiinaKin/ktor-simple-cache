@@ -1,12 +1,10 @@
 package com.ucasoft.ktor.simpleCache
 
-import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import kotlin.time.Duration
 
 class CacheOutputSelector : RouteSelector() {
-
-    override fun evaluate(context: RoutingResolveContext, segmentIndex: Int) = RouteSelectorEvaluation.Transparent
+    override suspend fun evaluate(context: RoutingResolveContext, segmentIndex: Int) = RouteSelectorEvaluation.Transparent
 }
 
 /**
